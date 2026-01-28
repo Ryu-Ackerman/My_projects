@@ -1,0 +1,88 @@
+import sys
+
+
+def review_test():
+
+    while True:
+        correct_answers = input('Enter the total correct ans or q for quit: ').lower()
+        if correct_answers == 'quit' or correct_answers == 'q':
+            sys.exit()
+        else:
+            overall = int(correct_answers) / 0.7
+            print(f"{round(overall), 1}%")
+            continue
+
+
+def end_year():
+
+    level = input('Enter the level: ').capitalize()
+    if level == 'A1':
+        while True:
+            correct_ans = input('Enter the number of correct ans or q for quit: ')
+            if correct_ans == 'q':
+                sys.exit()
+            else:
+                overall = int(correct_ans) * 70/80
+                try:
+                    speaking = int(input('Enter the speaking: '))
+                    overall += speaking
+                    print(f"{round(overall), 1}%")
+                    continue
+                except ValueError:
+                    print('Input an int')
+                    continue
+
+
+    if level == 'A2':
+        while True:
+            reading = input('Enter the reading: ').lower()
+            listening = input('Enter the listening: ').lower()
+            if reading == 'q' or listening == 'q':
+                sys.exit("You successfully quit the program!")
+            else:
+                try:
+                    lr = int(reading) + int(listening)
+                except ValueError:
+                    print('The last input was not an int!')
+                    continue
+                pre_total = lr * 0.9
+                while True:
+                    writing = input('Enter the writing: ')                    
+                    speaking = input("Enter the speaking: ")
+                    if writing == 'q' or speaking == 'q':
+                        sys.exit('You successfully quit the program!')
+                    try:
+                        total = pre_total + int(writing) + int(speaking)
+                        print(f"{round(total, 1)}%")
+                        break
+                    except ValueError:
+                        print('The last input was not an int!')
+                        continue
+
+                    
+    if level == 'B2':
+        while True:
+            reading = input('Enter the reading: ').lower()
+            listening = input('Enter the listening: ').lower()
+            if reading == 'q' or listening == 'q':
+                sys.exit("You successfully quit the program!")
+            else:
+                try:
+                    lr = int(reading) + int(listening)
+                except ValueError:
+                    print('The last input was not an int!')
+                    continue
+                pre_total = lr * 0.64
+                while True:
+                    writing = input('Enter the writing: ')                    
+                    speaking = input("Enter the speaking: ")
+                    if writing == 'q' or speaking == 'q':
+                        sys.exit('You successfully quit the program!')
+                    try:
+                        total = pre_total + int(writing) + int(speaking)
+                        print(f"{round(total, 1)}%")
+                        break
+                    except ValueError:
+                        print('The last input was not an int!')
+                        continue
+    #find the formulas for b1, a1+, b1+
