@@ -2,14 +2,16 @@ import sys
 
 
 def review_test():
-
+    ans = []
     while True:
         correct_answers = input('Enter the total correct ans or q for quit: ').lower()
         if correct_answers == 'quit' or correct_answers == 'q':
-            sys.exit()
+            avg = sum(ans)/len(ans)
+            sys.exit(f'The average is {round(avg, 1)}%')
         else:
             overall = int(correct_answers) / 0.7
-            print(f"{round(overall), 1}%")
+            ans.append(overall)
+            print(f"{round(overall, 1)}%")
             continue
 
 
@@ -85,4 +87,25 @@ def end_year():
                     except ValueError:
                         print('The last input was not an int!')
                         continue
+
+dict_ = {
+    'review': review_test,
+    'end': end_year,
+    '-h': lambda : [print("*",i) for i in dict_.keys()]
+}
+
+
+def main():
+    if len(sys.argv) < 2:
+        sys.exit('Exit for now later fix to something better, -h for help!')
+    else:
+        command = dict_.get(sys.argv[1].lower())
+        if command:
+            command()
+        else:
+            print('Command not found, -h for help')
+
+
+if __name__ == '__main__':
+    main()
     #find the formulas for b1, a1+, b1+
