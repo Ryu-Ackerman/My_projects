@@ -6,8 +6,11 @@ def review_test():
     while True:
         correct_answers = input('Enter the total correct ans or q for quit: ').lower()
         if correct_answers == 'quit' or correct_answers == 'q':
-            avg = sum(ans)/len(ans)
-            sys.exit(f'The average is {round(avg, 1)}%')
+            try:
+                avg = sum(ans)/len(ans)
+                sys.exit(f'The average is {round(avg, 1)}%')
+            except ZeroDivisionError:
+                sys.exit('No data entered!')
         else:
             overall = int(correct_answers) / 0.7
             ans.append(overall)
@@ -16,19 +19,24 @@ def review_test():
 
 
 def end_year():
-
+    lst = []
     level = input('Enter the level: ').capitalize()
     if level == 'A1' or level == 'A1+':
         while True:
             correct_ans = input('Enter the number of correct ans or q for quit: ')
             if correct_ans == 'q':
-                sys.exit()
+                try:
+                    sys.exit(f'The class average is {round(sum(lst)/len(lst), 1)}%')
+                except ZeroDivisionError:
+                    sys.exit('No data entered!')
             else:
                 overall = int(correct_ans) * 70/80
                 try:
                     speaking = int(input('Enter the speaking: '))
                     overall += speaking
-                    print(f"{round(overall), 1}%")
+                    ov = round(overall,1)
+                    lst.append(ov)
+                    print(f"{ov}%")
                     continue
                 except ValueError:
                     print('Input an int')
@@ -36,11 +44,15 @@ def end_year():
 
 
     if level == 'A2':
+        lst = []
         while True:
             reading = input('Enter the reading: ').lower()
             listening = input('Enter the listening: ').lower()
             if reading == 'q' or listening == 'q':
-                sys.exit("You successfully quit the program!")
+                try:
+                    sys.exit(f"The class avg {round(sum(lst)/len(lst),1)}%")
+                except ZeroDivisionError:
+                    sys.exit('No data entered!')
             else:
                 try:
                     lr = int(reading) + int(listening)
@@ -52,9 +64,14 @@ def end_year():
                     writing = input('Enter the writing: ')                    
                     speaking = input("Enter the speaking: ")
                     if writing == 'q' or speaking == 'q':
-                        sys.exit('You successfully quit the program!')
+                        try:
+                            avg = sum(lst)/len(lst)
+                            sys.exit(f'The class average is {round(avg, 1)}%')
+                        except ZeroDivisionError:
+                            sys.exit('No data entered!')
                     try:
                         total = pre_total + int(writing) + int(speaking)
+                        lst.append(total)
                         print(f"{round(total, 1)}%")
                         break
                     except ValueError:
@@ -63,11 +80,15 @@ def end_year():
     
 
     if level == 'B1':
+        lst = []
         while True:
             reading = input('Enter the reading: ').lower()
             listening = input('Enter the listening: ').lower()
             if reading == 'q' or listening == 'q':
-                sys.exit("You successfully quit the program!")
+                try:
+                    sys.exit(f"The class avg {round(sum(lst)/len(lst),1)}%")
+                except ZeroDivisionError:
+                    sys.exit('No data entered!')
             else:
                 try:
                     lr = int(reading) + int(listening)
@@ -79,22 +100,31 @@ def end_year():
                     writing = input('Enter the writing: ')                    
                     speaking = input("Enter the speaking: ")
                     if writing == 'q' or speaking == 'q':
-                        sys.exit('You successfully quit the program!')
+                        try:
+                            avg = sum(lst)/len(lst)
+                            sys.exit(f'The class average is {round(avg, 1)}%')
+                        except ZeroDivisionError:
+                            sys.exit('No data entered!')
                     try:
                         total = pre_total + int(writing) + int(speaking)
+                        lst.append(total)
                         print(f"{round(total, 1)}%")
                         break
                     except ValueError:
                         print('The last input was not an int!')
-                        continue    
+                        continue
     
 
     if level == 'B1+':
+        lst = []
         while True:
             reading = input('Enter the reading: ').lower()
             listening = input('Enter the listening: ').lower()
             if reading == 'q' or listening == 'q':
-                sys.exit("You successfully quit the program!")
+                try:
+                    sys.exit(f"The class avg {round(sum(lst)/len(lst),1)}%")
+                except ZeroDivisionError:
+                    sys.exit('No data entered!')
             else:
                 try:
                     lr = int(reading) + int(listening)
@@ -106,9 +136,14 @@ def end_year():
                     writing = input('Enter the writing: ')                    
                     speaking = input("Enter the speaking: ")
                     if writing == 'q' or speaking == 'q':
-                        sys.exit('You successfully quit the program!')
+                        try:
+                            avg = sum(lst)/len(lst)
+                            sys.exit(f'The class average is {round(avg, 1)}%')
+                        except ZeroDivisionError:
+                            sys.exit('No data entered!')
                     try:
                         total = pre_total + int(writing) + int(speaking)
+                        lst.append(total)
                         print(f"{round(total, 1)}%")
                         break
                     except ValueError:
@@ -117,11 +152,15 @@ def end_year():
     
                     
     if level == 'B2':
+        lst = []
         while True:
             reading = input('Enter the reading: ').lower()
             listening = input('Enter the listening: ').lower()
             if reading == 'q' or listening == 'q':
-                sys.exit("You successfully quit the program!")
+                try:
+                    sys.exit(f"The class avg {round(sum(lst)/len(lst),1)}%")
+                except ZeroDivisionError:
+                    sys.exit('No data entered!')
             else:
                 try:
                     lr = int(reading) + int(listening)
@@ -133,9 +172,14 @@ def end_year():
                     writing = input('Enter the writing: ')                    
                     speaking = input("Enter the speaking: ")
                     if writing == 'q' or speaking == 'q':
-                        sys.exit('You successfully quit the program!')
+                        try:
+                            avg = sum(lst)/len(lst)
+                            sys.exit(f'The class average is {round(avg, 1)}%')
+                        except ZeroDivisionError:
+                            sys.exit('No data entered!')
                     try:
                         total = pre_total + int(writing) + int(speaking)
+                        lst.append(total)
                         print(f"{round(total, 1)}%")
                         break
                     except ValueError:
