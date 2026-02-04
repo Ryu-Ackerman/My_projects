@@ -1,14 +1,39 @@
 import sys
+import csv
+
+
+class Holder():
+    def __init__(self, teacher, level, average=float):
+        self.teacher = teacher
+        self.level = level
+        try:
+            self.average = average
+        except ValueError as e:
+            raise e('The average should be a float!')
+    def turn_to_dict(self):
+        return {
+            'teacher': self.teacher,
+            'level': self.level,
+            'average': self.average
+        }
 
 
 def review_test():
+    teacher = input('Enter the teacher name: ')
+    level = input('Enter the level: ')
     ans = []
+    fieldnames = ['teacher', 'level', 'average']
     while True:
         correct_answers = input('Enter the total correct ans or q for quit: ').lower()
         if correct_answers == 'quit' or correct_answers == 'q':
             try:
-                avg = sum(ans)/len(ans)
-                sys.exit(f'The average is {round(avg, 1)}%')
+                avg = round(sum(ans)/len(ans), 1)
+                with open('polyg.csv', 'a') as f:
+                    writer = csv.DictWriter(f, fieldnames=fieldnames)
+                    # writer.writeheader()
+                    hr = Holder(teacher, level, avg)
+                    writer.writerow(hr.turn_to_dict())
+                sys.exit(f'The average is {avg}%')
             except ZeroDivisionError:
                 sys.exit('No data entered!')
         else:
@@ -19,14 +44,22 @@ def review_test():
 
 
 def end_year():
+    fieldnames = ['teacher', 'level', 'average']
     lst = []
+    teacher = input('Enter the teacher name: ')
     level = input('Enter the level: ').capitalize()
+    avg = round(sum(lst)/len(lst), 1)
+    hr = Holder(teacher, level, avg)
     if level == 'A1' or level == 'A1+':
         while True:
             correct_ans = input('Enter the number of correct ans or q for quit: ')
             if correct_ans == 'q':
                 try:
-                    sys.exit(f'The class average is {round(sum(lst)/len(lst), 1)}%')
+                    with open('end.csv') as f:
+                        writer = csv.DictWriter(f, fieldnames=fieldnames)
+                        writer.writeheader()
+                        writer.writerow(hr.turn_to_dict())
+                    sys.exit(f'The class average is {avg}%')
                 except ZeroDivisionError:
                     sys.exit('No data entered!')
             else:
@@ -203,6 +236,7 @@ def main():
         else:
             print('Command not found, -h for help')
 
-
+#level control could be improved instead of using if and if and if I think this could be improved somehow
+#add data base for average of each class to see everything))
 if __name__ == '__main__':
     main()
