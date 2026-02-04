@@ -48,16 +48,16 @@ def end_year():
     lst = []
     teacher = input('Enter the teacher name: ')
     level = input('Enter the level: ').capitalize()
-    avg = round(sum(lst)/len(lst), 1)
-    hr = Holder(teacher, level, avg)
     if level == 'A1' or level == 'A1+':
         while True:
             correct_ans = input('Enter the number of correct ans or q for quit: ')
             if correct_ans == 'q':
                 try:
-                    with open('end.csv') as f:
+                    with open('end.csv', 'a') as f:
                         writer = csv.DictWriter(f, fieldnames=fieldnames)
                         writer.writeheader()
+                        avg = round(sum(lst)/len(lst), 1)
+                        hr = Holder(teacher, level, avg)
                         writer.writerow(hr.turn_to_dict())
                     sys.exit(f'The class average is {avg}%')
                 except ZeroDivisionError:
@@ -77,13 +77,18 @@ def end_year():
 
 
     if level == 'A2':
-        lst = []
         while True:
             reading = input('Enter the reading: ').lower()
             listening = input('Enter the listening: ').lower()
             if reading == 'q' or listening == 'q':
                 try:
-                    sys.exit(f"The class avg {round(sum(lst)/len(lst),1)}%")
+                    with open('end.csv', 'a') as f:
+                        writer = csv.DictWriter(f, fieldnames=fieldnames)
+                        writer.writeheader()
+                        avg = round(sum(lst)/len(lst), 1)
+                        hr = Holder(teacher, level, avg)
+                        writer.writerow(hr.turn_to_dict())
+                    sys.exit(f"The class avg {avg}%")
                 except ZeroDivisionError:
                     sys.exit('No data entered!')
             else:
@@ -98,8 +103,7 @@ def end_year():
                     speaking = input("Enter the speaking: ")
                     if writing == 'q' or speaking == 'q':
                         try:
-                            avg = sum(lst)/len(lst)
-                            sys.exit(f'The class average is {round(avg, 1)}%')
+                            sys.exit(f'The class average is {avg}%')
                         except ZeroDivisionError:
                             sys.exit('No data entered!')
                     try:
@@ -113,13 +117,18 @@ def end_year():
     
 
     if level == 'B1':
-        lst = []
         while True:
             reading = input('Enter the reading: ').lower()
             listening = input('Enter the listening: ').lower()
             if reading == 'q' or listening == 'q':
                 try:
-                    sys.exit(f"The class avg {round(sum(lst)/len(lst),1)}%")
+                    with open('end.csv', 'a') as f:
+                        writer = csv.DictWriter(f, fieldnames=fieldnames)
+                        writer.writeheader()
+                        avg = round(sum(lst)/len(lst), 1)
+                        hr = Holder(teacher, level, avg)
+                        writer.writerow(hr.turn_to_dict())
+                    sys.exit(f"The class avg {avg}%")
                 except ZeroDivisionError:
                     sys.exit('No data entered!')
             else:
@@ -134,8 +143,7 @@ def end_year():
                     speaking = input("Enter the speaking: ")
                     if writing == 'q' or speaking == 'q':
                         try:
-                            avg = sum(lst)/len(lst)
-                            sys.exit(f'The class average is {round(avg, 1)}%')
+                            sys.exit(f'The class average is {avg}%')
                         except ZeroDivisionError:
                             sys.exit('No data entered!')
                     try:
@@ -149,13 +157,18 @@ def end_year():
     
 
     if level == 'B1+':
-        lst = []
         while True:
             reading = input('Enter the reading: ').lower()
             listening = input('Enter the listening: ').lower()
             if reading == 'q' or listening == 'q':
                 try:
-                    sys.exit(f"The class avg {round(sum(lst)/len(lst),1)}%")
+                    with open('end.csv', 'a') as f:
+                        writer = csv.DictWriter(f, fieldnames=fieldnames)
+                        writer.writeheader()
+                        avg = round(sum(lst)/len(lst), 1)
+                        hr = Holder(teacher, level, avg)
+                        writer.writerow(hr.turn_to_dict())
+                    sys.exit(f"The class avg {avg}%")
                 except ZeroDivisionError:
                     sys.exit('No data entered!')
             else:
@@ -170,8 +183,7 @@ def end_year():
                     speaking = input("Enter the speaking: ")
                     if writing == 'q' or speaking == 'q':
                         try:
-                            avg = sum(lst)/len(lst)
-                            sys.exit(f'The class average is {round(avg, 1)}%')
+                            sys.exit(f'The class average is {avg}%')
                         except ZeroDivisionError:
                             sys.exit('No data entered!')
                     try:
@@ -185,13 +197,18 @@ def end_year():
     
                     
     if level == 'B2':
-        lst = []
         while True:
             reading = input('Enter the reading: ').lower()
             listening = input('Enter the listening: ').lower()
             if reading == 'q' or listening == 'q':
                 try:
-                    sys.exit(f"The class avg {round(sum(lst)/len(lst),1)}%")
+                    with open('end.csv', 'a') as f:
+                        writer = csv.DictWriter(f, fieldnames=fieldnames)
+                        writer.writeheader()
+                        avg = round(sum(lst)/len(lst), 1)
+                        hr = Holder(teacher, level, avg)
+                        writer.writerow(hr.turn_to_dict())
+                    sys.exit(f"The class avg {avg}%")
                 except ZeroDivisionError:
                     sys.exit('No data entered!')
             else:
@@ -206,7 +223,6 @@ def end_year():
                     speaking = input("Enter the speaking: ")
                     if writing == 'q' or speaking == 'q':
                         try:
-                            avg = sum(lst)/len(lst)
                             sys.exit(f'The class average is {round(avg, 1)}%')
                         except ZeroDivisionError:
                             sys.exit('No data entered!')
@@ -237,6 +253,6 @@ def main():
             print('Command not found, -h for help')
 
 #level control could be improved instead of using if and if and if I think this could be improved somehow
-#add data base for average of each class to see everything))
+#the project is not fully complete yet
 if __name__ == '__main__':
     main()

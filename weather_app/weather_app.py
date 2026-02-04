@@ -1,11 +1,12 @@
 import requests
 import sys
-import collections
 import csv
-
+import os
 
 
 class Collect_data():
+
+    
     def __init__(self, city, temp, windspeed, date):
         self.city = city
         self.temp = temp
@@ -28,7 +29,6 @@ def display_saved():
         with open('kregg.csv') as f:
             for i in f:
                 print(i, end='')
-        sys.exit()
 
 
 
@@ -75,7 +75,7 @@ def average():
         while True:
             try:
                 dys = input('Enter the number of days you wanna see the average of: ').lower()
-                lines('krg.csv', int(dys))
+                days('kregg.csv', int(dys))
                 sys.exit()
             except ValueError:
                 if dys != 'quit':
@@ -114,20 +114,21 @@ def get_country():
         api_2 = f'https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current_weather=true'
         r_2 = requests.get(api_2)
         j_2 = r_2.json()
-        temp = j_2['current_weather']['temperature']
-        w_S = j_2['current_weather']['windspeed']
-        day = j_2['current_weather']['is_day']
-        date = j_2['current_weather']['time']
+        os.system('cls' if os.name == 'nt' else 'clear')
+        j2 = j_2['current_weather']
+        temp = j2['temperature']
+        w_S = j2['windspeed']
+        day = j2['is_day']
+        date = j2['time']
         print(f"The temperature is {temp}°C")
         print(f"The windspeed is {w_S} km/h")
         if day == 1:
             print('Day time')
         else: 
             print('Night time')
-        with open('krg.csv', 'a', newline='') as f:
+        with open('kregg.csv', 'a', newline='') as f:
             columns = ['city', 'temperature', 'windspeed' ,'date-time']
             writer = csv.DictWriter(f, fieldnames=columns)
-            # writer.writeheader()
             form = Collect_data(c, temp, w_S, date)
             writer.writerow(form.turn_dict())
     except requests.exceptions.RequestException:
@@ -137,7 +138,7 @@ def get_country():
 
 
 
-def lines(directory, num_of_days):
+def days(directory, num_of_days):
     tem = []
     w__s = []
     with open(directory) as f:
@@ -149,6 +150,7 @@ def lines(directory, num_of_days):
             w__s.append(float(ws))
         avg_temp = sum(tem)/len(tem)    
         avg_ws = sum(w__s)/len(w__s)
+        os.system('cls' if os.name == 'nt' else 'clear')
         print(f'The average windspeed in the last {num_of_days} day(s) is {round(avg_temp, 1)} km/h')
         print(f'The average windspeed in the last {num_of_days} day(s) is {round(avg_ws, 1)} km/h') 
 
