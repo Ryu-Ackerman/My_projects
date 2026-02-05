@@ -14,18 +14,19 @@ class Holder():
             'level': self.level,
             'average': self.average
         }
-    
-class Save():
-    def __init__(self, teacher, level, average):
-        self.teacher = teacher
-        self.level = level
-        self.average = average
-    def save_file(self):
+    def save_file_review(self):
         fieldnames = ['teacher', 'level', 'average']
-        with open('end.csv', 'a') as f:
+        with open('review.csv', 'a', newline='') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writerow(self.turn_to_dict())
+    def save_file_end(self):
+        fieldnames = ['teacher', 'level', 'average']
+        with open('end.csv', 'a', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writerow(self.turn_to_dict())
     
 LEVELS = {
+
     'A2': 0.9,
     'B1': 1/1.14,
     'B1+': 0.84,
@@ -42,10 +43,8 @@ def review_test():
         if correct_answers == 'quit' or correct_answers == 'q':
             try:
                 avg = round(sum(ans)/len(ans), 1)
-                with open('polyg.csv', 'a') as f:
-                    writer = csv.DictWriter(f, fieldnames=fieldnames)
-                    hr = Holder(teacher, level, avg)
-                    writer.writerow(hr.turn_to_dict())
+                hr = Holder(teacher, level, avg)
+                hr.save_file_review()
                 sys.exit(f'The average is {avg}%')
             except ZeroDivisionError:
                 sys.exit('No data entered!')
@@ -65,11 +64,9 @@ def a1_end(level, teacher):
             correct_ans = input('Enter the number of correct ans or q for quit: ')
             if correct_ans == 'q':
                 try:
-                    with open('end.csv', 'a') as f:
-                        writer = csv.DictWriter(f, fieldnames=fieldnames)
-                        avg = round(sum(lst)/len(lst), 1)
-                        hr = Holder(teacher, level, avg)
-                        writer.writerow(hr.turn_to_dict())
+                    avg = round(sum(lst)/len(lst), 1)
+                    hr = Holder(teacher, level, avg)
+                    hr.save_file_end()
                     sys.exit(f'The class average is {avg}%')
                 except ZeroDivisionError:
                     sys.exit('No data entered!')
@@ -147,8 +144,7 @@ dict_ = {
 
 def main():
     if len(sys.argv) < 2:
-        sys.exit('No enough arguments on the terminal!' \
-        '-h for help')
+        sys.exit('No enough arguments on the terminal!\n' '-h for help')
     command = dict_.get(sys.argv[1].lower())
     if command:
         command()
