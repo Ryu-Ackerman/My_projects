@@ -67,6 +67,9 @@ def forecast():
         print('Highest|Lowest')
         for z,i,x in zip(ind,maxt, mint):
             print(f'{z}){i}|{x}')
+        print('Highest avg-Lowest avg')
+        avg = f"{round(sum(maxt)/len(maxt), 1)}|{round(sum(mint)/len(mint), 1)}"
+        print(avg)
     except (requests.exceptions.RequestException):
         sys.exit('Connection error!')
 
