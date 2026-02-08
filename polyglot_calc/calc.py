@@ -14,14 +14,9 @@ class Holder():
             'level': self.level,
             'average': self.average
         }
-    def save_file_review(self):
+    def save_file(self, type):
         fieldnames = ['teacher', 'level', 'average']
-        with open('review.csv', 'a', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writerow(self.turn_to_dict())
-    def save_file_end(self):
-        fieldnames = ['teacher', 'level', 'average']
-        with open('end.csv', 'a', newline='') as f:
+        with open(f'{type}.csv', 'a', newline='') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writerow(self.turn_to_dict())
     
@@ -44,7 +39,7 @@ def review_test():
             try:
                 avg = round(sum(ans)/len(ans), 1)
                 hr = Holder(teacher, level, avg)
-                hr.save_file_review()
+                hr.save_file('review')
                 sys.exit(f'The average is {avg}%')
             except ZeroDivisionError:
                 sys.exit('No data entered!')
@@ -66,7 +61,7 @@ def a1_end(level, teacher):
                 try:
                     avg = round(sum(lst)/len(lst), 1)
                     hr = Holder(teacher, level, avg)
-                    hr.save_file_end()
+                    hr.save_file('end')
                     sys.exit(f'The class average is {avg}%')
                 except ZeroDivisionError:
                     sys.exit('No data entered!')
@@ -93,11 +88,9 @@ def handle_levels(level, teacher):
             listening = input('Enter the listening: ').lower()
             if reading == 'q' or listening == 'q':
                 try:
-                    with open('end.csv', 'a') as f:
-                        writer = csv.DictWriter(f, fieldnames=fieldnames)
-                        avg = round(sum(lst)/len(lst), 1)
-                        hr = Holder(teacher, level, avg)
-                        writer.writerow(hr.turn_to_dict())
+                    avg = round(sum(lst)/len(lst), 1)
+                    hr = Holder(teacher, level, avg)
+                    hr.save_file('end')
                     sys.exit(f"The class avg {avg}%")
                 except ZeroDivisionError:
                     sys.exit('No data entered!')
