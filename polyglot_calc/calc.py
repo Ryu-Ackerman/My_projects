@@ -14,14 +14,16 @@ class Holder():
             'level': self.level,
             'average': self.average
         }
-    def save_file(self, type):
+    def save_file(self, file_name):
         fieldnames = ['teacher', 'level', 'average']
-        with open(f'{type}.csv', 'a', newline='') as f:
+        with open(f'{file_name}.csv', 'a', newline='') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writerow(self.turn_to_dict())
     
-LEVELS = {
 
+
+
+LEVELS = {
     'A2': 0.9,
     'B1': 1/1.14,
     'B1+': 0.84,
@@ -129,10 +131,14 @@ def end_of_year():
     else:
         sys.exit('Uknown level!')
 
+commands = ['end (to calculate end of years)',
+            'review (calculate review tests)',
+            '-h']
+
 dict_ = {
     'end': end_of_year,
     'review': review_test,
-    '-h': lambda : [print("*",i) for i in dict_.keys()]
+    '-h': lambda : [print("*",i) for i in commands]
 }
 
 def main():
