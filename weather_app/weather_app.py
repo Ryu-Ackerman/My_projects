@@ -1,3 +1,6 @@
+from typing import Any
+
+
 import requests
 import sys
 import csv
@@ -64,10 +67,10 @@ def forecast():
         ind = range(1,8)
         maxt = units['temperature_2m_max']
         mint = units['temperature_2m_min']
-        print('Highest|Lowest')
+        print(f'{'-'*10}\n{'Highest-Lowest'}\n{'-'*10}')
         for z,i,x in zip(ind,maxt, mint):
             print(f'{z}){i}|{x}')
-        print('Highest avg-Lowest avg')
+        print(f'{'-'*10}\n{'Highest-Lowest'}\n{'-'*10}')
         avg = f"{round(sum(maxt)/len(maxt), 1)}|{round(sum(mint)/len(mint), 1)}"
         print(avg)
     except (requests.exceptions.RequestException):
@@ -110,7 +113,7 @@ def get_country():
                 if user == "quit":
                     sys.exit('You successfully quit the program!')
                 else:
-                    print("Invalid input!")
+                    print('Invalid input!')
                     continue
         longitude = j['results'][int(user) - 1]['longitude']
         latitude = j['results'][int(user) -1]['latitude']
