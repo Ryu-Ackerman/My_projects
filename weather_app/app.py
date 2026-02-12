@@ -2,7 +2,6 @@ import requests
 import sys
 import csv
 from datetime import datetime
-import pytz
 from timezonefinder import TimezoneFinder
 from zoneinfo import ZoneInfo
 
@@ -96,17 +95,20 @@ def forecast():
 
         current = datetime.now(ZoneInfo(zone))
         day = current.strftime('%A')
-        ind_day = [ind for ind,i in enumerate(week) if i == day][0]
+
+        ind_day = [inde for inde,i in enumerate(week) if i == day][0]
         dates = j2['daily']['time']
+
         print(f'{'-'*10}\n{'Highest-Lowest'}\n{'-'*10}')
 
         for z,i,x,y,t in zip(ind,maxt, mint, range(len(week)), dates):
             y = (ind_day+y)%7
 
-            print(f'{z}){i}°C|{x}°C, {week[y]}|{t}')
+            print(f'{z}){i}°C|{x}°C || {t}|{week[y]}')
 
         print(f'{'-'*10}\n{'Highest-Lowest (average)'}\n{'-'*10}')
         avg = f"{round(sum(maxt)/len(maxt), 1)}°C|{round(sum(mint)/len(mint), 1)}°C"
+
         print(avg)
     except (requests.exceptions.RequestException):
         sys.exit('Connection error!')
@@ -117,11 +119,15 @@ def average():
             try:
                 dys = input('Enter the number of days you wanna see the average of: ').lower()
                 days('kregg.csv', int(dys))
+
+
                 sys.exit()
             except ValueError:
+
                 if dys != 'quit':
                     print('Invalid input')
                     continue
+
                 else:
                     sys.exit()
 
@@ -133,8 +139,11 @@ def get_country():
     try:
         r = requests.get(api_1)
         j = r.json()
+
         if not j['results']:
             sys.exit("City not found. Check the spelling please!")
+
+
         for index, i in enumerate(j['results']):
             print(f"{index+1}){i['name']}, {i['country']}")
 
@@ -166,12 +175,15 @@ def get_country():
         w_S = j2['windspeed']
         day = j2['is_day']
         date = j2['time']
-        print(f"The temperature is {temp}°C")
+        
+        l = '-'*10
+        print(f"{l}\nThe temperature is {temp}°C")
         print(f"The windspeed is {w_S} km/h")
+
         if day == 1:
-            print('Day time')
+            print(f'Day time\n{l}')
         else: 
-            print('Night time')
+            print(f'Night time\n{l}')
 
 
         with open('kregg.csv', 'a', newline='') as f:
@@ -191,7 +203,9 @@ def get_country():
 def days(directory, num_of_days):
     tem = []
     w__s = []
+
     with open(directory) as f:
+
         reader = csv.DictReader(f)
         for i in reader:
             temps = i['temperature']
