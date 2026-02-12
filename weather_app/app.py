@@ -97,15 +97,16 @@ def forecast():
         current = datetime.now(ZoneInfo(zone))
         day = current.strftime('%A')
         ind_day = [ind for ind,i in enumerate(week) if i == day][0]
+        dates = j2['daily']['time']
         print(f'{'-'*10}\n{'Highest-Lowest'}\n{'-'*10}')
 
-        for z,i,x,y in zip(ind,maxt, mint, range(len(week))):
+        for z,i,x,y,t in zip(ind,maxt, mint, range(len(week)), dates):
             y = (ind_day+y)%7
 
-            print(f'{z}){i}|{x}, {week[y]}')
+            print(f'{z}){i}°C|{x}°C, {week[y]}|{t}')
 
         print(f'{'-'*10}\n{'Highest-Lowest (average)'}\n{'-'*10}')
-        avg = f"{round(sum(maxt)/len(maxt), 1)}|{round(sum(mint)/len(mint), 1)}"
+        avg = f"{round(sum(maxt)/len(maxt), 1)}°C|{round(sum(mint)/len(mint), 1)}°C"
         print(avg)
     except (requests.exceptions.RequestException):
         sys.exit('Connection error!')
@@ -199,7 +200,7 @@ def days(directory, num_of_days):
             w__s.append(float(ws))
         avg_temp = sum(tem)/len(tem)    
         avg_ws = sum(w__s)/len(w__s)
-        print(f'The average windspeed in the last {num_of_days} day(s) is {round(avg_temp, 1)} km/h')
+        print(f'The average temperature in the last {num_of_days} day(s) is {round(avg_temp, 1)} degrees')
         print(f'The average windspeed in the last {num_of_days} day(s) is {round(avg_ws, 1)} km/h') 
 
 
