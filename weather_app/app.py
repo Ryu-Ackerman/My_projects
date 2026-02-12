@@ -1,10 +1,11 @@
-from typing import Any
-
-
 import requests
 import sys
 import csv
-import os
+from datetime import datetime
+import pytz
+from timezonefinder import TimezoneFinder
+from zoneinfo import ZoneInfo
+
 
 
 class Collect_data():
@@ -26,6 +27,15 @@ class Collect_data():
         }
 
 
+week = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+]
 
 
 def display_saved():
@@ -38,6 +48,8 @@ def display_saved():
 def forecast():
     c = input('Enter the city/country name: ').lower()
     api_1 = f'https://geocoding-api.open-meteo.com/v1/search?name={c}'
+
+
     try:
         r = requests.get(api_1)
         j = r.json()
@@ -45,6 +57,8 @@ def forecast():
             sys.exit("City not found. Check the spelling please!")
         for index, i in enumerate(j['results']):
             print(f"{index+1}){i['name']}, {i['country']}")
+
+
         while True:
             try:
                 user = input("Enter the number of the intended city/country: ").lower()
@@ -58,19 +72,39 @@ def forecast():
                 else:
                     print("Invalid input!")
                     continue
+
+
         longitude = j['results'][int(user) - 1]['longitude']
         latitude = j['results'][int(user) -1]['latitude']
         api3 = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current_weather=true&hourly=temperature_2m,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto"
+
+
         r2 = requests.get(api3)
         j2 = r2.json()
         units = j2['daily']
         ind = range(1,8)
         maxt = units['temperature_2m_max']
         mint = units['temperature_2m_min']
+
+
+        tf = TimezoneFinder()
+        zone = tf.timezone_at(
+            lng=longitude,
+            lat=latitude
+        )
+
+
+        current = datetime.now(ZoneInfo(zone))
+        day = current.strftime('%A')
+        ind_day = [ind for ind,i in enumerate(week) if i == day][0]
         print(f'{'-'*10}\n{'Highest-Lowest'}\n{'-'*10}')
-        for z,i,x in zip(ind,maxt, mint):
-            print(f'{z}){i}|{x}')
-        print(f'{'-'*10}\n{'Highest-Lowest'}\n{'-'*10}')
+
+        for z,i,x,y in zip(ind,maxt, mint, range(len(week))):
+            y = (ind_day+y)%7
+
+            print(f'{z}){i}|{x}, {week[y]}')
+
+        print(f'{'-'*10}\n{'Highest-Lowest (average)'}\n{'-'*10}')
         avg = f"{round(sum(maxt)/len(maxt), 1)}|{round(sum(mint)/len(mint), 1)}"
         print(avg)
     except (requests.exceptions.RequestException):
@@ -102,6 +136,8 @@ def get_country():
             sys.exit("City not found. Check the spelling please!")
         for index, i in enumerate(j['results']):
             print(f"{index+1}){i['name']}, {i['country']}")
+
+
         while True:
             try:
                 user = input("Enter the number of the intended city/country: ").lower()
@@ -115,12 +151,15 @@ def get_country():
                 else:
                     print('Invalid input!')
                     continue
+
+
         longitude = j['results'][int(user) - 1]['longitude']
         latitude = j['results'][int(user) -1]['latitude']
         api_2 = f'https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current_weather=true'
+
+
         r_2 = requests.get(api_2)
         j_2 = r_2.json()
-        os.system('cls' if os.name == 'nt' else 'clear')
         j2 = j_2['current_weather']
         temp = j2['temperature']
         w_S = j2['windspeed']
@@ -132,11 +171,15 @@ def get_country():
             print('Day time')
         else: 
             print('Night time')
+
+
         with open('kregg.csv', 'a', newline='') as f:
             columns = ['city', 'temperature', 'windspeed' ,'date-time']
             writer = csv.DictWriter(f, fieldnames=columns)
             form = Collect_data(c, temp, w_S, date)
             writer.writerow(form.turn_dict())
+
+
     except requests.exceptions.RequestException:
         print("Check your connection sir!")
     except(KeyError, ValueError):
@@ -156,7 +199,6 @@ def days(directory, num_of_days):
             w__s.append(float(ws))
         avg_temp = sum(tem)/len(tem)    
         avg_ws = sum(w__s)/len(w__s)
-        os.system('cls' if os.name == 'nt' else 'clear')
         print(f'The average windspeed in the last {num_of_days} day(s) is {round(avg_temp, 1)} km/h')
         print(f'The average windspeed in the last {num_of_days} day(s) is {round(avg_ws, 1)} km/h') 
 
@@ -180,7 +222,6 @@ def main():
         command()
     else:
         get_country()
-
 
 
 if __name__ == "__main__":
