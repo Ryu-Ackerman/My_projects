@@ -4,7 +4,7 @@ import csv
 from datetime import datetime
 from timezonefinder import TimezoneFinder
 from zoneinfo import ZoneInfo
-
+from collections import deque
 
 
 class Collect_data():
@@ -56,7 +56,7 @@ def forecast():
             sys.exit("City not found. Check the spelling please!")
         for index, i in enumerate(j['results']):
             print(f"{index+1}){i['name']}, {i['country']}")
-
+ 
 
         while True:
             try:
@@ -116,22 +116,6 @@ def forecast():
         sys.exit('Connection error!')
 
     
-def average():  
-        while True:
-            try:
-                dys = input('Enter the number of days you wanna see the average of: ').lower()
-                days('kregg.csv', int(dys))
-
-
-                sys.exit()
-            except ValueError:
-
-                if dys != 'quit':
-                    print('Invalid input')
-                    continue
-
-                else:
-                    sys.exit()
 
 
                     
@@ -202,7 +186,8 @@ def get_country():
 
 
 
-def days(directory, num_of_days):
+def days(directory, num_of_days, c_name):
+    nm = []
     tem = []
     w__s = []
 
@@ -210,15 +195,45 @@ def days(directory, num_of_days):
 
         reader = csv.DictReader(f)
         for i in reader:
-            temps = i['temperature']
-            tem.append(float(temps))
-            ws = i['windspeed']
-            w__s.append(float(ws))
-        avg_temp = sum(tem)/len(tem)    
-        avg_ws = sum(w__s)/len(w__s)
-        print(f'The average temperature in the last {num_of_days} day(s) is {round(avg_temp, 1)} degrees')
-        print(f'The average windspeed in the last {num_of_days} day(s) is {round(avg_ws, 1)} km/h') 
+            if i['city'] == c_name:
+                nm.append(i)
 
+        last_lines = deque(nm, maxlen=num_of_days)
+        for x in last_lines:
+            temp = x['temperature']
+            ws = x['windspeed']
+            tem.append(float(temp))
+            w__s.append(float(ws))
+
+
+        avgt = sum(tem)/len(tem)
+        avgw = sum(w__s)/len(w__s)
+        last_days = len(nm)
+        if num_of_days > last_days: raise ValueError
+        else: pass
+        print(f'The average temperature in the last {num_of_days} day(s) is {round(avgt, 1)}')
+        print(f'The average windspeed in the last {num_of_days} day(s) is {round(avgw, 1)}')
+
+
+
+
+def average():  
+        cname = input('Enter the city/country name: ')
+        while True:
+            try:
+                dys = input('Enter the number of days you wanna see the average of: ').lower()
+                days('kregg.csv', int(dys), cname)
+
+
+                sys.exit()
+            except ValueError:
+
+                if dys != 'quit':
+                    print('Invalid input or the given city/country has not been searched this many times!')
+                    continue
+
+                else:
+                    sys.exit()
 
 
 funcs = {
@@ -240,6 +255,6 @@ def main():
     else:
         get_country()
 
-#fix file io for different city and coutnry, if another city name input then use for loop and find a match and then save a given temperature
+
 if __name__ == "__main__":
     main()
