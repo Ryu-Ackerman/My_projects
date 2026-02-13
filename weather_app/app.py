@@ -103,6 +103,8 @@ def forecast():
 
         for z,i,x,y,t in zip(ind,maxt, mint, range(len(week)), dates):
             y = (ind_day+y)%7
+            if i < 10.0: i = f"0{i}"
+            if x < 10.0: x = f"0{x}"
 
             print(f'{z}){i}°C|{x}°C || {t}|{week[y]}')
 
@@ -114,7 +116,7 @@ def forecast():
         sys.exit('Connection error!')
 
     
-def average():
+def average():  
         while True:
             try:
                 dys = input('Enter the number of days you wanna see the average of: ').lower()
@@ -238,6 +240,6 @@ def main():
     else:
         get_country()
 
-
+#fix file io for different city and coutnry, if another city name input then use for loop and find a match and then save a given temperature
 if __name__ == "__main__":
     main()
