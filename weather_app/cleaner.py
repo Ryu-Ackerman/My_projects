@@ -13,4 +13,3 @@ def clean():
         writer.writeheader()
         for i in lines:
             writer.writerow(i)
-clean()

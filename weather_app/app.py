@@ -12,6 +12,7 @@ class Collect_data():
 
     
     def __init__(self, city, temp, windspeed, date):
+
         self.city = city
         self.temp = temp
         self.windspeed = windspeed
@@ -19,6 +20,7 @@ class Collect_data():
 
 
     def turn_dict(self):
+
         return {
             'city': self.city,
             'temperature': self.temp,
@@ -36,7 +38,10 @@ WEEK = [
     'Saturday',
     'Sunday'
 ]
-
+MONTHS = {'01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'Apr',
+        '05': 'May','06': 'Jun', '07': 'Jul','08': 'Aug',
+        '09': 'Sep','10': 'Oct','11': 'Nov','12': 'Dec'
+}
 
 def display_saved():
         with open('kregg.csv') as f:
@@ -93,6 +98,7 @@ def forecast():
             lat=latitude
         )
 
+        lst_date = []
 
         current = datetime.now(ZoneInfo(zone))
         day = current.strftime('%A')
@@ -100,14 +106,28 @@ def forecast():
         ind_day = [inde for inde,i in enumerate(WEEK) if i == day][0]
         dates = j2['daily']['time']
 
+        for m in dates:
+            for j in m[::5]: j = f'{j}'
+            for n in m[::6]: n = f'{n}'
+            num_mon = j+n
+        
+        if num_mon in MONTHS.keys():
+            month = MONTHS[f'{num_mon}']
+
+        for i in dates: 
+            for g in i[::8]: g = f'{g}'
+            for p in i[::9]: p = f'{p}'
+            ds = g+p
+            lst_date.append(ds)
+
         print(f'{'-'*10}\n{'Highest-Lowest'}\n{'-'*10}')
 
-        for z,i,x,y,t in zip(ind,maxt, mint, range(len(WEEK)), dates):
+        for z,i,x,y,t in zip(ind,maxt, mint, range(len(WEEK)), lst_date):
             y = (ind_day+y)%7
             if i < 10.0: i = f"0{i}"
             if x < 10.0: x = f"0{x}"
 
-            print(f'{z}){i}°C|{x}°C || {t}|{WEEK[y]}')
+            print(f'{z}){i}°C|{x}°C || {month} {t}th |{WEEK[y]}')
 
         print(f'{'-'*10}\n{'Highest-Lowest (average)'}\n{'-'*10}')
         avg = f"{round(sum(maxt)/len(maxt), 1)}°C|{round(sum(mint)/len(mint), 1)}°C"
@@ -167,10 +187,8 @@ def get_country():
         print(f"{l}\nThe temperature is {temp}°C")
         print(f"The windspeed is {w_S} km/h")
 
-        if day == 1:
-            print(f'Day time\n{l}')
-        else: 
-            print(f'Night time\n{l}')
+        if day == 1: print(f'Day time\n{l}')
+        else: print(f'Night time\n{l}')
 
 
         with open('kregg.csv', 'a', newline='') as f:
@@ -256,7 +274,7 @@ def main():
     else:
         get_country()
 
-
+#test the api if it handles weather (rain, snow and etc.)
 if __name__ == "__main__":
     main()
     clean()
