@@ -26,7 +26,7 @@ class Collect_data():
         }
 
 
-week = [
+WEEK = [
     'Monday',
     'Tuesday',
     'Wednesday',
@@ -96,17 +96,17 @@ def forecast():
         current = datetime.now(ZoneInfo(zone))
         day = current.strftime('%A')
 
-        ind_day = [inde for inde,i in enumerate(week) if i == day][0]
+        ind_day = [inde for inde,i in enumerate(WEEK) if i == day][0]
         dates = j2['daily']['time']
 
         print(f'{'-'*10}\n{'Highest-Lowest'}\n{'-'*10}')
 
-        for z,i,x,y,t in zip(ind,maxt, mint, range(len(week)), dates):
+        for z,i,x,y,t in zip(ind,maxt, mint, range(len(WEEK)), dates):
             y = (ind_day+y)%7
             if i < 10.0: i = f"0{i}"
             if x < 10.0: x = f"0{x}"
 
-            print(f'{z}){i}°C|{x}°C || {t}|{week[y]}')
+            print(f'{z}){i}°C|{x}°C || {t}|{WEEK[y]}')
 
         print(f'{'-'*10}\n{'Highest-Lowest (average)'}\n{'-'*10}')
         avg = f"{round(sum(maxt)/len(maxt), 1)}°C|{round(sum(mint)/len(mint), 1)}°C"
@@ -211,8 +211,8 @@ def days(directory, num_of_days, c_name):
         last_days = len(nm)
         if num_of_days > last_days: raise ValueError
         else: pass
-        print(f'The average temperature in the last {num_of_days} day(s) is {round(avgt, 1)}')
-        print(f'The average windspeed in the last {num_of_days} day(s) is {round(avgw, 1)}')
+        print(f'The average temperature in the last {num_of_days} search(es) is {round(avgt, 1)}°C')
+        print(f'The average windspeed in the last {num_of_days} search(es) is {round(avgw, 1)} km/h')
 
 
 
