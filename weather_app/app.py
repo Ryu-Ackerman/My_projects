@@ -5,6 +5,7 @@ from datetime import datetime
 from timezonefinder import TimezoneFinder
 from zoneinfo import ZoneInfo
 from collections import deque
+from cleaner import clean
 
 
 class Collect_data():
@@ -258,3 +259,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    clean()
