@@ -30,12 +30,8 @@ class Collect_data():
 
 
 WEEK = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
+    'Monday','Tuesday','Wednesday',
+    'Thursday','Friday','Saturday',
     'Sunday'
 ]
 MONTHS = {'01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'Apr',
@@ -177,6 +173,8 @@ def get_country():
 
         r_2 = requests.get(api_2)
         j_2 = r_2.json()
+
+
         j2 = j_2['current_weather']
         temp = j2['temperature']
         w_S = j2['windspeed']
@@ -255,14 +253,19 @@ def average():
                     sys.exit()
 
 
+command_lst = ['average - to see the average temperature and the windspeed in a certain number of searches',
+               'saved - to see the csv file from the terminal',
+               'forecast - to see the projected temperature and the windspeed in the upcoming 7 days',
+               '<name of country/city> - to see the current temperature of the searched city/country',
+               '-h - to list all the functions']
+
+
 funcs = {
     'average': average,
     'saved': display_saved,
     'forecast': forecast,
-    '<name of a country>':lambda:None,
-    '-h': lambda: [print("*",k) for k in funcs.keys()],
+    '-h': lambda : [print('*',i) for i in command_lst]
 }
-
 
 
 def main():
@@ -274,7 +277,7 @@ def main():
     else:
         get_country()
 
-#test the api if it handles weather (rain, snow and etc.)
+
 if __name__ == "__main__":
     main()
     clean()
