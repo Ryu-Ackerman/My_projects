@@ -1,0 +1,48 @@
+import yt_dlp as yd
+import sys
+
+def video_downloader():
+    url = input('Enter the url: ')
+    ydl_opts = {
+        'format': 'bestvideo[height<=1080]',
+        'outtmpl': r'E:\Python_projects\downloaded_stuff\videos\%(title)s.%(ext)s',
+        'nonplaylist': True
+    }
+    with yd.YoutubeDL(ydl_opts) as somth:
+        somth.download([url])
+
+
+def audio_dl():
+    url = input('Enter the url: ')
+    configs = {
+        'format': 'bestaudio/best',
+        'outtmpl': r'E:\Python_projects\downloaded_stuff\songs\%(title)s.%(ext)s',
+        'ffmpeg_location': r'C:\Users\User\AppData\Local\Microsoft\WinGet\Links',
+        'postprocessors': [
+            {
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '192'
+            }
+        ]
+    }
+    with yd.YoutubeDL(configs) as aud_dl:
+        aud_dl.download([url])
+
+commands = {
+    'video': video_downloader,
+    'audio': audio_dl
+}
+
+command = commands.get(sys.argv[1])
+def main():
+    if len(sys.argv) < 2:
+        sys.exit('Not enough arguments on the terminal')
+    else:
+        if command:
+            command()
+        else:
+            sys.exit('Error')
+
+if __name__ == '__main__':
+    main()
