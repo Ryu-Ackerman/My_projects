@@ -4,6 +4,8 @@ import sys
 
 
 class Holder():
+
+    
     def __init__(self, teacher, level, average):
         self.teacher = teacher
         self.level = level
@@ -35,20 +37,28 @@ def review_test():
     level = input('Enter the level: ')
     ans = []
     fieldnames = ['teacher', 'level', 'average']
+
     while True:
+
         correct_answers = input('Enter the total correct ans or q for quit: ').lower()
         if correct_answers == 'quit' or correct_answers == 'q':
+
             try:
+
                 avg = round(sum(ans)/len(ans), 1)
                 hr = Holder(teacher, level, avg)
                 hr.save_file('review')
                 sys.exit(f'The average is {avg}%')
+
             except ZeroDivisionError:
+
                 sys.exit('No data entered!')
         else:
+
             overall = int(correct_answers) / 0.7
             ans.append(overall)
             print(f"{round(overall, 1)}%")
+
             continue
 
 
@@ -57,53 +67,85 @@ def a1_end(level, teacher):
     fieldnames = ['teacher', 'level', 'average']
     lst = []
     if level == 'A1' or level == 'A1+':
+
         while True:
+
+
             correct_ans = input('Enter the number of correct ans or q for quit: ')
             if correct_ans == 'q':
+
                 try:
+
                     avg = round(sum(lst)/len(lst), 1)
                     hr = Holder(teacher, level, avg)
                     hr.save_file('end')
                     sys.exit(f'The class average is {avg}%')
                 except ZeroDivisionError:
                     sys.exit('No data entered!')
+
             else:
+
                 overall = int(correct_ans) * 70/80
                 try:
+                    
                     speaking = int(input('Enter the speaking: '))
                     overall += speaking
                     ov = round(overall,1)
                     lst.append(ov)
                     print(f"{ov}%")
                     continue
+
                 except ValueError:
-                    print('Input an int')
+
+                    print('input and int!') 
                     continue
 
 
 def handle_levels(level, teacher):
+
     lst = []
     fieldnames = ['teacher', 'level', 'average']
     multiplier = LEVELS.get(level)
+
     while True:
-            reading = input('Enter the reading: ').lower()
-            listening = input('Enter the listening: ').lower()
+            
+            try:
+
+                reading = input('Enter the reading: ').lower()
+                listening = input('Enter the listening: ').lower()
+
+            except ValueError:
+
+                print('Invalid input!')
+                continue
+
             if reading == 'q' or listening == 'q':
+
                 try:
+
                     avg = round(sum(lst)/len(lst), 1)
                     hr = Holder(teacher, level, avg)
                     hr.save_file('end')
                     sys.exit(f"The class avg {avg}%")
+
                 except ZeroDivisionError:
+
+
                     sys.exit('No data entered!')
+
             else:
+
                 try:
+
                     lr = int(reading) + int(listening)
+
                 except ValueError:
                     print('The last input was not an int!')
                     continue
                 pre_total = lr * multiplier
+
                 while True:
+                    
                     writing = input('Enter the writing: ')                    
                     speaking = input("Enter the speaking: ")
                     if writing == 'q' or speaking == 'q':
@@ -122,8 +164,11 @@ def handle_levels(level, teacher):
 
 
 def end_of_year():
+    
     teacher = input("Enter the teacher's name: ")
     level = input('Enter the level: ').capitalize()
+
+
     if level in LEVELS:
         handle_levels(level, teacher)
     elif level in ('A1', 'A1+'):
