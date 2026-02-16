@@ -38,11 +38,10 @@ command = commands.get(sys.argv[1])
 def main():
     if len(sys.argv) < 2:
         sys.exit('Not enough arguments on the terminal')
+    if command:
+        command()
     else:
-        if command:
-            command()
-        else:
-            sys.exit('Error')
+        sys.exit('Error')
 
 if __name__ == '__main__':
     main()
