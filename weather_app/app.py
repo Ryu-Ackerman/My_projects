@@ -51,14 +51,14 @@ def forecast():
         j = r.json()
         if not j['results']:
             sys.exit("City not found. Check the spelling please!")
-        for index, i in enumerate(j['results']):
+        for index, i in enumerate(j['results']):#list all the available cities/countries with the given name
             print(f"{index+1}){i['name']}, {i['country']}")
  
 
         while True:
             try:
                 user = input("Enter the number of the intended city/country: ").lower()
-                if int(user) < 1 or int(user) > len(j['results']):
+                if int(user) < 1 or int(user) > len(j['results']):#if the user chooses a number that does not match the index start the loop again
                     print('Input out of range!')
                     continue
                 break
@@ -70,7 +70,7 @@ def forecast():
                     continue
 
 
-        longitude = j['results'][int(user) - 1]['longitude']
+        longitude = j['results'][int(user) - 1]['longitude']#if the user chooses a number it subtract one to match everything (1 == 0, 2 == 1 and etc.)
         latitude = j['results'][int(user) -1]['latitude']
         api3 = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current_weather=true&hourly=temperature_2m,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto"
 
@@ -78,9 +78,9 @@ def forecast():
         r2 = requests.get(api3)
         j2 = r2.json()
         units = j2['daily']
-        ind = range(1,8)
-        maxt = units['temperature_2m_max']
-        mint = units['temperature_2m_min']
+        ind = range(0,7)
+        maxt = units['temperature_2m_max']#highest temperature
+        mint = units['temperature_2m_min']#lowest temperature
 
 
         tf = TimezoneFinder()
@@ -92,7 +92,7 @@ def forecast():
         lst_date = []
 
         current = datetime.now(ZoneInfo(zone))
-        day = current.strftime('%A')
+        day = current.strftime('%A')#finding the day of the week with a given city/country name
 
         ind_day = [inde for inde,i in enumerate(WEEK) if i == day][0]
         dates = j2['daily']['time']
@@ -114,7 +114,7 @@ def forecast():
         print(f'{'-'*10}\n{'Highest-Lowest'}\n{'-'*10}')
 
         for z,i,x,y,t in zip(ind,maxt, mint, range(len(WEEK)), lst_date):
-            y = (ind_day+y)%7
+            y = (ind_day+y)%7#the remainder is the day of the week in sequence, if it is wednesday the ind_day is 3 and it will be added 0 first and wednesday will be given, then 1 will be added and index 4 and thursday
             if i < 10.0: i = f"0{i}"
             if x < 10.0: x = f"0{x}"
 
@@ -198,7 +198,7 @@ def get_country():
 
 
 
-def days(directory, num_of_days, c_name):
+def days(directory, num_of_days, c_name):#an average temperature and windspeed calculator in a given number of searches from the user input
     nm = []
     tem = []
     w__s = []
@@ -221,7 +221,7 @@ def days(directory, num_of_days, c_name):
         avgt = sum(tem)/len(tem)
         avgw = sum(w__s)/len(w__s)
         last_days = len(nm)
-        if num_of_days > last_days: raise ValueError
+        if num_of_days > last_days: raise ValueError#if the user input is higher than the available number of searches in csv it will raise a ValueError
         else: pass
         print(f'The average temperature in the last {num_of_days} search(es) is {round(avgt, 1)}°C')
         print(f'The average windspeed in the last {num_of_days} search(es) is {round(avgw, 1)} km/h')
@@ -240,7 +240,7 @@ def average():
                 sys.exit()
             except ValueError:
 
-                if dys != 'quit':
+                if dys != 'quit':#if the user does not quit nor choose quit or a number this error will be raised
                     print('Invalid input or the given city/country has not been searched this many times!')
                     continue
 
@@ -252,7 +252,7 @@ def display_saved():
         with open('kregg.csv') as f:
             for i in f:
                 print(i, end='')
-                
+
 
 command_lst = ['average - to see the average temperature and the windspeed in a certain number of searches',
                'saved - to see the csv file from the terminal',
