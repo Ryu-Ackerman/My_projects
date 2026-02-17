@@ -42,90 +42,96 @@ MONTHS = {'01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'Apr',
 
 
 def forecast():
-    c = input('Enter the city/country name: ').lower()
-    api_1 = f'https://geocoding-api.open-meteo.com/v1/search?name={c}'
+    while True:
+        c = input('Enter the city/country name: ').lower()
+        api_1 = f'https://geocoding-api.open-meteo.com/v1/search?name={c}'
 
 
-    try:
-        r = requests.get(api_1)
-        j = r.json()
-        if not j['results']:
-            sys.exit("City not found. Check the spelling please!")
-        for index, i in enumerate(j['results']):#list all the available cities/countries with the given name
-            print(f"{index+1}){i['name']}, {i['country']}")
- 
-
-        while True:
+        try:
+            r = requests.get(api_1)
+            j = r.json()
             try:
-                user = input("Enter the number of the intended city/country: ").lower()
-                if int(user) < 1 or int(user) > len(j['results']):#if the user chooses a number that does not match the index start the loop again
-                    print('Input out of range!')
-                    continue
-                break
-            except ValueError:
-                if user == "quit":
-                    sys.exit('You successfully quit the program!')
-                else:
-                    print("Invalid input!")
-                    continue
+                if not j['results']:
+                    sys.exit("City not found. Check the spelling please!")
+                for index, i in enumerate(j['results']):#list all the available cities/countries with the given name
+                    print(f"{index+1}){i['name']}, {i['country']}")
+            except KeyError:
+                print('Invalid city/country name!')
+                continue
+    
+
+            while True:
+                try:
+                    user = input("Enter the number of the intended city/country: ").lower()
+                    if int(user) < 1 or int(user) > len(j['results']):#if the user chooses a number that does not match the index start the loop again
+                        print('Input out of range!')
+                        continue
+                    break
+                except ValueError:
+                    if user == "quit":
+                        sys.exit('You successfully quit the program!')
+                    else:
+                        print("Invalid input!")
+                        continue
 
 
-        longitude = j['results'][int(user) - 1]['longitude']#if the user chooses a number it subtract one to match everything (1 == 0, 2 == 1 and etc.)
-        latitude = j['results'][int(user) -1]['latitude']
-        api3 = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current_weather=true&hourly=temperature_2m,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto"
+            longitude = j['results'][int(user) - 1]['longitude']#if the user chooses a number it subtract one to match everything (1 == 0, 2 == 1 and etc.)
+            latitude = j['results'][int(user) -1]['latitude']
+            api3 = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current_weather=true&hourly=temperature_2m,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto"
 
 
-        r2 = requests.get(api3)
-        j2 = r2.json()
-        units = j2['daily']
-        ind = range(0,7)
-        maxt = units['temperature_2m_max']#highest temperature
-        mint = units['temperature_2m_min']#lowest temperature
+            r2 = requests.get(api3)
+            j2 = r2.json()
+            units = j2['daily']
+            ind = range(1,8)
+            maxt = units['temperature_2m_max']#highest temperature
+            mint = units['temperature_2m_min']#lowest temperature
 
 
-        tf = TimezoneFinder()
-        zone = tf.timezone_at(
-            lng=longitude,
-            lat=latitude
-        )
+            tf = TimezoneFinder()
+            zone = tf.timezone_at(
+                lng=longitude,
+                lat=latitude
+            )
 
-        lst_date = []
+            lst_date = []
 
-        current = datetime.now(ZoneInfo(zone))
-        day = current.strftime('%A')#finding the day of the week with a given city/country name
+            current = datetime.now(ZoneInfo(zone))
+            day = current.strftime('%A')#finding the day of the week with a given city/country name
 
-        ind_day = [inde for inde,i in enumerate(WEEK) if i == day][0]
-        dates = j2['daily']['time']
+            ind_day = [inde for inde,i in enumerate(WEEK) if i == day][0]
+            dates = j2['daily']['time']
 
-        for m in dates:
-            for j in m[::5]: j = f'{j}'
-            for n in m[::6]: n = f'{n}'
-            num_mon = j+n
-        
-        if num_mon in MONTHS.keys():
-            month = MONTHS[f'{num_mon}']
+            for m in dates:
+                for j in m[::5]: j = f'{j}'
+                for n in m[::6]: n = f'{n}'
+                num_mon = j+n
+            
+            if num_mon in MONTHS.keys():
+                month = MONTHS[f'{num_mon}']
 
-        for i in dates: 
-            for g in i[::8]: g = f'{g}'
-            for p in i[::9]: p = f'{p}'
-            ds = g+p
-            lst_date.append(ds)
+            for i in dates: 
+                for g in i[::8]: g = f'{g}'
+                for p in i[::9]: p = f'{p}'
+                ds = g+p
+                lst_date.append(ds)
 
-        print(f'{'-'*10}\n{'Highest-Lowest'}\n{'-'*10}')
+            print(f'{'-'*10}\n{'Highest-Lowest'}\n{'-'*10}')
 
-        for z,i,x,y,t in zip(ind,maxt, mint, range(len(WEEK)), lst_date):
-            y = (ind_day+y)%7#the remainder is the day of the week in sequence, if it is wednesday the ind_day is 3 and it will be added 0 first and wednesday will be given, then 1 will be added and index 4 and thursday
-            if i < 10.0: i = f"0{i}"
-            if x < 10.0: x = f"0{x}"
+            for z,i,x,y,t in zip(ind,maxt, mint, range(len(WEEK)), lst_date):
+                y = (ind_day+y)%7#the remainder is the day of the week in sequence, if it is wednesday the ind_day is 3 and it will be added 0 first and wednesday will be given, then 1 will be added and index 4 and thursday
+                if i < 10.0: i = f"0{i}"
+                if x < 10.0: x = f"0{x}"
 
-            print(f'{z}){i}°C|{x}°C || {month} {t}th |{WEEK[y]}')
+                print(f'{z}){i}°C|{x}°C || {month} {t}th |{WEEK[y]}')
 
-        print(f'{'-'*10}\n{'Highest-Lowest (average)'}\n{'-'*10}')
-        avg = f"{round(sum(maxt)/len(maxt), 1)}°C|{round(sum(mint)/len(mint), 1)}°C"
 
-        print(avg)
-    except (requests.exceptions.RequestException):
-        sys.exit('Connection error!')
+            print(f'{'-'*10}\n{'Highest-Lowest (average)'}\n{'-'*10}')
+            avg = f"{round(sum(maxt)/len(maxt), 1)}°C|{round(sum(mint)/len(mint), 1)}°C"
+
+            sys.exit(avg)
+        except (requests.exceptions.RequestException):
+            sys.exit('Connection error!')
 
     
 
