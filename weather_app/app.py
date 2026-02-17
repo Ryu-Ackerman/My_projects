@@ -39,11 +39,6 @@ MONTHS = {'01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'Apr',
         '09': 'Sep','10': 'Oct','11': 'Nov','12': 'Dec'
 }
 
-def display_saved():
-        with open('kregg.csv') as f:
-            for i in f:
-                print(i, end='')
-
 
 
 def forecast():
@@ -252,6 +247,12 @@ def average():
                 else:
                     sys.exit()
 
+
+def display_saved():
+        with open('kregg.csv') as f:
+            for i in f:
+                print(i, end='')
+                
 
 command_lst = ['average - to see the average temperature and the windspeed in a certain number of searches',
                'saved - to see the csv file from the terminal',
