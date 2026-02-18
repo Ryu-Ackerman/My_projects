@@ -5,7 +5,7 @@ from datetime import datetime
 from timezonefinder import TimezoneFinder
 from zoneinfo import ZoneInfo
 from collections import deque
-from cleaner import clean
+from cleaner import clean #function from cleaner.py 
 
 
 class Collect_data():
@@ -34,6 +34,7 @@ WEEK = [
     'Thursday','Friday','Saturday',
     'Sunday'
 ]
+
 MONTHS = {'01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'Apr',
         '05': 'May','06': 'Jun', '07': 'Jul','08': 'Aug',
         '09': 'Sep','10': 'Oct','11': 'Nov','12': 'Dec'
@@ -102,19 +103,16 @@ def forecast():
             ind_day = [inde for inde,i in enumerate(WEEK) if i == day][0]
             dates = j2['daily']['time']
 
-            for m in dates:
-                for j in m[::5]: j = f'{j}'
-                for n in m[::6]: n = f'{n}'
-                num_mon = j+n
-            
-            if num_mon in MONTHS.keys():
-                month = MONTHS[f'{num_mon}']
 
-            for i in dates: 
-                for g in i[::8]: g = f'{g}'
-                for p in i[::9]: p = f'{p}'
-                ds = g+p
-                lst_date.append(ds)
+            for m in dates:
+                month = m[5:7]
+                day = m[8:10]
+                lst_date.append(day)
+
+
+            if month in MONTHS.keys():
+                month = MONTHS[f'{month}']
+
 
             print(f'{'-'*10}\n{'Highest-Lowest'}\n{'-'*10}')
 
@@ -254,7 +252,7 @@ def average():
                     sys.exit()
 
 
-def display_saved():
+def display_saved():#a function to read the csv file without having to go inside of the file 
         with open('kregg.csv') as f:
             for i in f:
                 print(i, end='')
