@@ -46,7 +46,8 @@ def forecast():
     while True:
         c = input('Enter the city/country name: ').lower()
         api_1 = f'https://geocoding-api.open-meteo.com/v1/search?name={c}'
-
+        if c == 'q' or c == 'quit':
+            sys.exit('Successfully quit!')
 
         try:
             r = requests.get(api_1)
@@ -100,8 +101,8 @@ def forecast():
             current = datetime.now(ZoneInfo(zone))
             day = current.strftime('%A')#finding the day of the week with a given city/country name
 
-            ind_day = [inde for inde,i in enumerate(WEEK) if i == day][0]
-            dates = j2['daily']['time']
+            ind_day = [inde for inde,i in enumerate(WEEK) if i == day][0]    
+            dates = j2['daily']['time'] #[0] at the end cuz inde returns a list and to extract a value from it we just specify the item we want
 
 
             for m in dates:
@@ -109,9 +110,7 @@ def forecast():
                 day = m[8:10]
                 lst_date.append(day)
 
-
-            if month in MONTHS.keys():
-                month = MONTHS[f'{month}']
+            month = MONTHS[f'{month}']
 
 
             print(f'{'-'*10}\n{'Highest-Lowest'}\n{'-'*10}')
