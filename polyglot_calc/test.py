@@ -121,33 +121,63 @@ def handle_levels(level, teacher):
                         print('The last input was not an int!')
                         continue
 
+def averagebyteacher():
+    while True:
+        t_type = input('Enter the type of test: ')
+        if t_type != 'end' and t_type != 'review':
+            print('Only end and review tests are supported!')
+            continue
+        else:
+            how_many_test = 0
+            while True:
+                teacher = input('Enter the teacher name: ')
+                lst = []
+                with open(f'{t_type}.csv') as f:
+                    reader = csv.DictReader(f)
+                    for i in reader:
+                        if teacher == i['teacher']:
+                            how_many_test += 1 
+                            lst.append(float(i['average']))
 
-def end_of_year():
-    teacher = input("Enter the teacher's name: ")
-    level = input('Enter the level: ').capitalize()
-    if level in LEVELS:
-        handle_levels(level, teacher)
-    elif level in ('A1', 'A1+'):
-        a1_end(level, teacher)
-    else:
-        sys.exit('Uknown level!')
+                line = '-'*57
+                try:
+                    avrg = sum(lst)/len(lst)
+                except ZeroDivisionError:
+                    print('The given teacher does not exist in the history!')
+                    continue
 
-dict_ = {
-    'end': end_of_year,
-    'review': review_test,
-    '-h': lambda : [print("*",i) for i in dict_.keys()]
-}
+                print(f'{line}\nThe class average of {teacher} is {round(avrg, 1)}% in the last {how_many_test} tests\n{line}')
+                exit()
 
-def main():
-    if len(sys.argv) < 2:
-        sys.exit('No enough arguments on the terminal!' \
-        '-h for help')
-    command = dict_.get(sys.argv[1].lower())
-    if command:
-        command()
-    else:
-        sys.exit('Uknown command!' \
-        '-h for help')
+averagebyteacher()
 
-if __name__ == '__main__':
-    main()
+# def end_of_year():
+#     teacher = input("Enter the teacher's name: ")
+#     level = input('Enter the level: ').capitalize()
+#     if level in LEVELS:
+#         handle_levels(level, teacher)
+#     elif level in ('A1', 'A1+'):
+#         a1_end(level, teacher)
+#     else:
+#         sys.exit('Uknown level!')
+
+
+# dict_ = {
+#     'end': end_of_year,
+#     'review': review_test,
+#     '-h': lambda : [print("*",i) for i in dict_.keys()]
+# }
+
+# def main():
+#     if len(sys.argv) < 2:
+#         sys.exit('No enough arguments on the terminal!' \
+#         '-h for help')
+#     command = dict_.get(sys.argv[1].lower())
+#     if command:
+#         command()
+#     else:
+#         sys.exit('Uknown command!' \
+#         '-h for help')
+
+# if __name__ == '__main__':
+#     main()

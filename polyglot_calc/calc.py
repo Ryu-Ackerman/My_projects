@@ -7,16 +7,21 @@ class Holder():
 
     
     def __init__(self, teacher, level, average):
+
         self.teacher = teacher
         self.level = level
         self.average = average
+
     def turn_to_dict(self):
+
         return {
             'teacher': self.teacher,
             'level': self.level,
             'average': self.average
         }
+    
     def save_file(self, file_name):
+
         fieldnames = ['teacher', 'level', 'average']
         with open(f'{file_name}.csv', 'a', newline='') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -33,6 +38,7 @@ LEVELS = {
 }
 
 def review_test():
+    
     teacher = input('Enter the teacher name: ')
     level = input('Enter the level: ')
     ans = []
@@ -176,6 +182,45 @@ def end_of_year():
     else:
         sys.exit('Uknown level!')
 
+
+
+def averagebyteacher():
+    while True:
+
+        t_type = input('Enter the type of test: ')
+        if t_type != 'end' and t_type != 'review':
+
+            print('Only end and review tests are supported!')
+            continue
+
+        else:
+
+            how_many_test = 0
+
+            while True:
+
+                teacher = input('Enter the teacher name: ')
+                lst = []
+                
+                with open(f'{t_type}.csv') as f:
+                    reader = csv.DictReader(f)
+                    for i in reader:
+                        if teacher == i['teacher']:
+                            how_many_test += 1 
+                            lst.append(float(i['average']))
+
+                line = '-'*57
+                try:
+                    avrg = sum(lst)/len(lst)
+                except ZeroDivisionError:
+                    print('The given teacher does not exist in the history!')
+                    continue
+
+                print(f'{line}\nThe class average of {teacher} is {round(avrg, 1)}% in the last {how_many_test} tests\n{line}')
+                exit()
+
+
+
 commands = ['end (to calculate end of years)',
             'review (calculate review tests)',
             '-h']
@@ -183,6 +228,7 @@ commands = ['end (to calculate end of years)',
 dict_ = {
     'end': end_of_year,
     'review': review_test,
+    'average': averagebyteacher,
     '-h': lambda : [print("*",i) for i in commands]
 }
 
