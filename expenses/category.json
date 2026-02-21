@@ -1,20 +1,8 @@
 {
     "total_money": {
-        "amount": 59990.0
-    },
-    "food": {
-        "amount": 238000.0
-    },
-    "clothes": {
-        "amount": 500000.0
-    },
-    "course": {
-        "amount": 500000.0
+        "amount": 9990.0
     },
     "transport": {
-        "amount": 132010.0
-    },
-    "snack": {
-        "amount": 84000.0
+        "amount": 10000.0
     }
 }
