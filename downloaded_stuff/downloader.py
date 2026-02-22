@@ -3,12 +3,12 @@ import sys
 
 def video_downloader():
     url = input('Enter the url: ')
-    ydl_opts = {
+    configs = {
         'format': 'bestvideo[height<=1080]',
         'outtmpl': r'E:\Python_projects\downloaded_stuff\videos\%(title)s.%(ext)s',
         'nonplaylist': True
     }
-    with yd.YoutubeDL(ydl_opts) as somth:
+    with yd.YoutubeDL(configs) as somth:
         somth.download([url])
 
 
